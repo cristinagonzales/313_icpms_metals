@@ -1,0 +1,33 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+```
+
+```{r importing data}
+AA_imported <- read_csv("~/chem313/313_icpms/data/AA_Data.csv",
+                        skip = 4,
+                        na = "N/A")
+
+AA_imported <- AA_imported %>%
+  rename(Sample.Key = "Sample Key")
+
+sample_key <- read.csv("~/chem313/313_icpms/data/Sample_Key.csv", 
+                           skip = 0)      
+
+```
+
+```{r merging AA data with sample key}
+AA_merged <- merge(AA_imported, sample_key)
+
+```
+

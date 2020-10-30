@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r, message = FALSE}
 library(tidyverse)
 library(readr)
+library(janitor)
 ```
 
 ```{r}
@@ -52,7 +53,7 @@ ICPMS_tidy <- ICPMS_imported %>%
     Sample.Key) %>%
   pivot_longer(1:6, names_to = "metal", values_to = "CPS") %>%
   #mutating in RSD data
-  mutate(RSD = RSD_Data$RSD/RSD_Data$Ge_RSD,
+  mutate(RSD = RSD_data$RSD/RSD_data$Ge_RSD,
          CPS = CPS/Ge72) %>%
   select(-Ge72)
 
@@ -61,7 +62,8 @@ all(RSD_data$Sample.Key==ICPMS_tidy$Sample.Key, RSD_data$metal==ICPMS_tidy$metal
 ```
 
 ```{r merging sample key}
-ICPMS_merged <- merge(ICPMS_tidy, sample_key)
+ICPMS_merged <- merge(ICPMS_tidy, sample_key) %>%
+  clean_names()
 
 ICPMS_merged 
 ```
@@ -71,4 +73,6 @@ ICPMS_merged
 #removing everything from environment except final data set
 rm(list = setdiff(ls(), "ICPMS_merged"))
 ```
+
+
 
