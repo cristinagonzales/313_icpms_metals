@@ -31,3 +31,7 @@ AA_merged <- merge(AA_imported, sample_key)
 
 ```
 
+```{r}
+write.csv(AA_merged, "~/chem313/313_icpms/data/tidy_AA.csv")
+```
+

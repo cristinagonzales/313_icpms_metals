@@ -74,5 +74,9 @@ ICPMS_merged
 rm(list = setdiff(ls(), "ICPMS_merged"))
 ```
 
+```{r}
+write.csv(ICPMS_merged, file = "~/chem313/313_icpms/data/tidy_ICPMS.csv")
+
+```
 
 
