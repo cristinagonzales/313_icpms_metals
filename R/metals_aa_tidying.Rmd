@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(tidyverse)
 library(readr)
+library(janitor)
 ```
 
 ```{r importing data}
@@ -27,7 +28,8 @@ sample_key <- read.csv("~/chem313/313_icpms/data/Sample_Key.csv",
 ```
 
 ```{r merging AA data with sample key}
-AA_merged <- merge(AA_imported, sample_key)
+AA_merged <- merge(AA_imported, sample_key) %>%
+  clean_names()
 
 ```
 
