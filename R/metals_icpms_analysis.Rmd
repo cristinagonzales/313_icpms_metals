@@ -59,7 +59,7 @@ for (unique_metal in metals_analyzed) {
 ICPMS_cal
 ```
 
-```{r function}
+```{r function for sample analysis}
 #inputs: unique_site (as a character)
 #outputs: concentration vector
 
@@ -111,6 +111,19 @@ sample_analysis <- function(unique_site){
 }
 ```
 
+```{r function for diff functions}
+#inputs: a function
+#outputs: a data frame with the function outputs from each site
+
+run_sites <- function(Function){
+  value <- NULL
+  for (site in sample_sites){
+    site_value <- Function(site)
+    value <- rbind(site_value, value)
+  }
+  return(value)
+}
+```
 
 
 
