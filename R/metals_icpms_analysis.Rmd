@@ -125,6 +125,13 @@ run_sites <- function(Function){
 }
 ```
 
+```{r analysis}
+MB <- sample_analysis("MB") #(ug/kg)
+uncor_sample <- run_sites(sample_analysis) #values do not account for dilutions (ug/kg)
+
+MB
+uncor_sample
+```
 
 
 
