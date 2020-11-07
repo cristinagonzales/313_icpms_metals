@@ -7,8 +7,12 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r}
+```{r, message = FALSE}
 library(tidyverse)
 library(readr)
+```
+
+```{r importing data}
+AA <- read.csv("~/chem313/313_icpms/data/tidy_AA.csv")
 ```
 
