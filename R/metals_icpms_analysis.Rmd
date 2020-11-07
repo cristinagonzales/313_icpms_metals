@@ -187,6 +187,9 @@ sample_data <- merge(ICPMS, sample_data_mb) %>%
          -conc_dil_error)
 ```
 
+```{r cleaning environment, warning = FALSE}
+rm(list = ls()[!ls() %in% c("ICPMS", "sample_data")])
+```
 
 
 
