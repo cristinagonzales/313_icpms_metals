@@ -192,5 +192,37 @@ rm(list = ls()[!ls() %in% c("ICPMS", "sample_data")])
 ```
 
 
+```{r average conc from samples}
+sample_conc <- sample_data %>%
+  filter(site != "QC") %>%
+  mutate(conc = conc_unblanked - conc_blanked) %>%
+  group_by(metal) %>%
+  summarize(conc_mean = mean(conc),
+            conc_sd = sd(conc),
+            count = n()) %>%
+  mutate(error = qt(0.975, df = count - 1)*conc_sd/sqrt(count),
+         lower = conc_mean - error,
+         upper = conc_mean + error) %>%
+  select(-count,
+         -error)
+
+
+```
+
+```{r average conc from qc}
+qc_conc <- sample_data %>%
+  filter(site == "QC") %>%
+  mutate(conc = conc_unblanked - conc_blanked) %>%
+  group_by(metal) %>%
+  summarize(conc_mean = mean(conc),
+            conc_sd = sd(conc),
+            count = n()) %>%
+  mutate(error = qt(0.975, df = count - 1)*conc_sd/sqrt(count),
+         lower = conc_mean - error,
+         upper = conc_mean + error) %>%
+  select(-count,
+         -error)
+```
+
 
 
