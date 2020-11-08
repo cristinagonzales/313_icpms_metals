@@ -79,8 +79,8 @@ sample_analysis <- function(unique_site){
       b_e <- cal$intercept_std
       m_e <- cal$slope_std
       x <- (y-b)/m #The units are dependent on the calibration standards (Kg/mL)
-      RSD <- sample_data$rsd
-      CPS <- sample_data$cps
+      RSD <- ((sample_data$rsd/100)*sample_data$cps)
+      CPS <- sample_data$cps 
       #error propagation
       e_yb <- sqrt((RSD)^2 + (b_e)^2) #error in y-b from calibration
       yb <- CPS - b
