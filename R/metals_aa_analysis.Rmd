@@ -1,5 +1,5 @@
 ---
-title: "Untitled"
+  title: "AA Data Analysis"
 output: html_document
 ---
 
@@ -14,5 +14,27 @@ library(readr)
 
 ```{r importing data}
 AA <- read.csv("~/chem313/313_icpms/data/tidy_AA.csv")
+```
+
+```{r}
+cal <- AA %>%
+  filter(type != "Sample") %>%
+  select(mean_abs, percent_rsd, concentration)
+#weighted linear regression
+#w <- 1/(cal$mean_abs*cal$percent_rsd)^2
+model <- lm(cal$mean_abs ~ cal$concentration)
+
+slope <- model$coefficients[2]
+intercept <- model$coefficients[1]
+slope_std <- summary(model)$coefficients[2,2]
+intercept_std <- summary(model)$coefficients[1,2]
+
+plot(cal$mean_abs ~ cal$concentration,
+       xlab = paste("Concentration of Cr53 (ppb)"),
+       ylab = "Mean Absorbance") +
+    abline(model, col = "red") +
+    title(paste("Calibration for Cr53"))
+
+equation <- tibble(metal = "Cr53", slope, slope_std, intercept, intercept_std)
 ```
 
