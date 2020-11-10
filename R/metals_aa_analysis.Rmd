@@ -16,9 +16,9 @@ library(readr)
 AA <- read.csv("~/chem313/313_icpms/data/tidy_AA.csv")
 ```
 
-```{r}
+```{r calibration curve}
 cal <- AA %>%
-  filter(type != "Sample") %>%
+  filter(type != "Sample", percent_rsd != "HIGH") %>%
   select(mean_abs, percent_rsd, concentration)
 #weighted linear regression
 #w <- 1/(cal$mean_abs*cal$percent_rsd)^2
@@ -36,5 +36,51 @@ plot(cal$mean_abs ~ cal$concentration,
     title(paste("Calibration for Cr53"))
 
 equation <- tibble(metal = "Cr53", slope, slope_std, intercept, intercept_std)
+equation
+```
+
+```{r}
+sample_sites <- unique(filter(AA, site!= "MB", site != "")$site)
+#inputs: unique_site (as a character)
+#outputs: concentration vector
+sample_analysis <- function(unique_site){
+  concentration_data <- NULL
+  sample <- filter (AA, site == unique_site)
+  #data <- NULL
+  for (ID in sample$sample_key){
+    sample_data <- filter(sample, sample_key == ID)
+    m <- cal$slope
+    b <- cal$intercept
+    y <- sample_data$mean_abs
+    b_e <- cal$intercept_std
+    m_e <- cal$slope_std
+    x <- (y-b)/m #The units are dependent on the calibration standards (Kg/mL)
+    RSD <- ((sample_data$percent_rsd/100)*sample_data$cps)
+    abs <- sample_data$mean_abs
+    #error propagation
+    e_yb <- sqrt((RSD)^2 + (b_e)^2) #error in y-b from calibration
+    yb <- abs - b
+    e_x <- x*sqrt((e_yb/yb)^2 +(m_e/m)^2) #error in x from calibration
+    if(unique_site != "MB"){
+      concentration_data <- data_frame(sample_key = sample_data$sample_key,
+                                         analyst = sample_data$analyst,
+                                         metal = "Cr53",
+                                         site = unique_site,
+                                         conc_dil = x,
+                                         conc_dil_error = e_x) %>%
+        rbind(concentration_data)
+    }
+  }
+  if (unique_site == "MB"){
+      x <- mean(data$x)
+      e_x <- sd(data$x)
+      concentration_data <- data_frame(metal = "Cr53",
+                                       site = unique_site,
+                                       conc_dil = x,
+                                       conc_dil_error = e_x) %>%
+        rbind(concentration_data)
+  }
+  return(concentration_data)
+}
 ```
 
