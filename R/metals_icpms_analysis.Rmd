@@ -196,7 +196,7 @@ rm(list = ls()[!ls() %in% c("ICPMS", "sample_data")])
 sample_conc <- sample_data %>%
   filter(site != "QC") %>%
   mutate(conc = conc_unblanked - conc_blanked) %>%
-  group_by(metal) %>%
+  group_by(metal, site) %>%
   summarize(conc_mean = mean(conc),
             conc_sd = sd(conc),
             count = n()) %>%
