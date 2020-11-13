@@ -167,8 +167,8 @@ sample_conc_aa <- sample_data_aa %>%
             conc_sd = sd(conc_blanked),
             count = n()) %>%
   mutate(error = qnorm(0.975)*conc_sd/sqrt(count),
-         lower = conc_mean - error,
-         upper = conc_mean + error) %>%
+         lower_ci = conc_mean - error,
+         upper_ci = conc_mean + error) %>%
   select(-count,
          -error)
 

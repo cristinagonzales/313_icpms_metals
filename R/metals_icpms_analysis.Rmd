@@ -201,7 +201,8 @@ sample_conc <- sample_data %>%
             count = n()) %>%
   mutate(error = qnorm(0.975)*conc_sd/sqrt(count),
          lower = conc_mean - error,
-         upper = conc_mean + error) %>%
+         upper = conc_mean + error,
+         mass_frac = conc_mean/1000) %>%
   select(-count,
          -error)
 
@@ -216,8 +217,9 @@ qc_conc <- sample_data %>%
             conc_sd = sd(conc_unblanked),
             count = n()) %>%
   mutate(error = qnorm(0.975)*conc_sd/sqrt(count),
-         lower = conc_mean - error,
-         upper = conc_mean + error) %>%
+         lower_ci = conc_mean - error,
+         upper_ci = conc_mean + error, 
+         mass_frac = conc_mean/1000) %>%
   select(-count,
          -error)
 ```
