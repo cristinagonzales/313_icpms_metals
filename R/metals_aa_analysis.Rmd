@@ -51,26 +51,26 @@ sample_analysis <- function(unique_site){
   sample <- filter(AA, site == unique_site)
   data <- NULL
   for (ID in sample$sample_key){
-    sample_data <- filter(sample, sample_key == ID)
+    sample_data_aa <- filter(sample, sample_key == ID)
     
     m <- cal$slope
     b <- cal$intercept
-    y <- sample_data$mean_abs
+    y <- sample_data_aa$mean_abs
     
     b_e <- cal$intercept_std
     m_e <- cal$slope_std
     x <- (y-b)/m #The units are dependent on the calibration standards (Kg/mL)
     
-    RSD <- ((sample_data$rsd/100)*sample_data$mean_abs)
-    abs <- sample_data$mean_abs
+    RSD <- ((sample_data_aa$rsd/100)*sample_data_aa$mean_abs)
+    abs <- sample_data_aa$mean_abs
     #error propagation
     e_yb <- sqrt((RSD)^2 + (b_e)^2) #error in y-b from calibration
     yb <- abs - b
     e_x <- x*sqrt((e_yb/yb)^2 +(m_e/m)^2) #error in x from calibration
     data <- rbind(data, data_frame(sample_key = ID, x, e_x))
     if(unique_site != "MB"){
-      concentration_data <- data_frame(sample_key = sample_data$sample_key,
-                                         analyst = sample_data$analyst,
+      concentration_data <- data_frame(sample_key = sample_data_aa$sample_key,
+                                         analyst = sample_data_aa$analyst,
                                          metal = "Cr53",
                                          site = unique_site,
                                          conc_dil = x,
@@ -112,4 +112,49 @@ uncor_sample <- run_sites(sample_analysis) #values do not account for dilutions 
 
 MB
 uncor_sample
+```
+
+```{r}
+sample_data_mb <- NULL
+#error propagation: subtraction of MB
+conc_dil_blanked <- uncor_sample$conc_dil-MB$conc_dil
+conc_dil_blanked_error <- sqrt(uncor_sample$conc_dil_error)^2 + (MB$conc_dil_error)^2
+sample_data_mb <- uncor_sample %>%
+  mutate(conc_dil_blanked, conc_dil_blanked_error) %>%
+  rbind(sample_data_mb)
+sample_data_mb
+```
+
+```{r dilution factor}
+#error propagation
+vol_e <- 1
+mass_e <- 0.001
+dil_1010_e <- sqrt(1^2 + 10^2)
+dil_e <- sqrt((dil_1010_e/1010)^2 + (1/10)^2) #error in 101 dilution factor
+
+#correct for dilution and propagate error
+sample_data_aa <- merge(ICPMS, sample_data_mb) %>%
+  unique() %>%
+  mutate(conc_blanked = conc_dil_blanked*(total_volume/1000)/(mass_of_soil/1000),
+         conc_blanked_error = conc_blanked *   
+           sqrt((conc_dil_blanked_error/conc_dil_blanked)^2 + 
+           (dil_e/101)^2 +
+           (mass_e/mass_of_soil)^2 +
+           (vol_e/total_volume)^2),
+         conc_unblanked = conc_dil*(total_volume/1000)/(mass_of_soil/1000),
+         conc_unblanked_error = conc_unblanked*
+           sqrt((conc_dil_error/conc_dil)^2 +
+                  (dil_e/101)^2 +
+                  (mass_e/mass_of_soil)^2 +
+                  (vol_e/total_volume)^2)) %>%
+  select(-concentration,
+         -type,
+         -mass_of_soil,
+         -total_volume,
+         -cps,
+         -rsd,
+         -conc_dil_blanked,
+         -conc_dil_blanked_error,
+         -conc_dil,
+         -conc_dil_error)
 ```
