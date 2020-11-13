@@ -199,7 +199,7 @@ sample_conc <- sample_data %>%
   summarize(conc_mean = mean(conc_blanked),
             conc_sd = sd(conc_blanked),
             count = n()) %>%
-  mutate(error = qt(0.975, df = count - 1)*conc_sd/sqrt(count),
+  mutate(error = qnorm(0.975)*conc_sd/sqrt(count),
          lower = conc_mean - error,
          upper = conc_mean + error) %>%
   select(-count,
@@ -215,7 +215,7 @@ qc_conc <- sample_data %>%
   summarize(conc_mean = mean(conc_unblanked),
             conc_sd = sd(conc_unblanked),
             count = n()) %>%
-  mutate(error = qt(0.975, df = count - 1)*conc_sd/sqrt(count),
+  mutate(error = qnorm(0.975)*conc_sd/sqrt(count),
          lower = conc_mean - error,
          upper = conc_mean + error) %>%
   select(-count,
