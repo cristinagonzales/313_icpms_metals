@@ -19,10 +19,11 @@ AA <- read.csv("~/chem313/313_icpms/data/tidy_AA.csv")
 ```{r calibration curve}
 cal <- AA %>%
   filter(type != "Sample", percent_rsd != "HIGH") %>%
-  select(mean_abs, percent_rsd, concentration)
+  mutate(rsd = as.numeric(percent_rsd)*100) %>%
+  select(mean_abs, rsd, concentration)
 #weighted linear regression
-#w <- 1/(cal$mean_abs*cal$percent_rsd)^2
-model <- lm(cal$mean_abs ~ cal$concentration)
+w <- 1/(cal$mean_abs*cal$rsd)^2
+model <- lm(cal$mean_abs ~ cal$concentration, weights = w)
 
 slope <- model$coefficients[2]
 intercept <- model$coefficients[1]
@@ -46,21 +47,25 @@ sample_sites <- unique(filter(AA, site != "MB", site != "")$site)
 sample_analysis <- function(unique_site){
   concentration_data <- NULL
   sample <- filter (AA, site == unique_site)
-  #data <- NULL
+  data <- NULL
   for (ID in sample$sample_key){
     sample_data <- filter(sample, sample_key == ID)
+    
     m <- cal$slope
     b <- cal$intercept
     y <- sample_data$mean_abs
+    
     b_e <- cal$intercept_std
     m_e <- cal$slope_std
     x <- (y-b)/m #The units are dependent on the calibration standards (Kg/mL)
-    RSD <- ((sample_data$percent_rsd/100)*sample_data$cps)
+    
+    RSD <- ((sample_data$rsd/100)*sample_data$mean_abs)
     abs <- sample_data$mean_abs
     #error propagation
     e_yb <- sqrt((RSD)^2 + (b_e)^2) #error in y-b from calibration
     yb <- abs - b
     e_x <- x*sqrt((e_yb/yb)^2 +(m_e/m)^2) #error in x from calibration
+    data <- rbind(data, data_frame(sample_key = ID, x, e_x))
     if(unique_site != "MB"){
       concentration_data <- data_frame(sample_key = sample_data$sample_key,
                                          analyst = sample_data$analyst,
