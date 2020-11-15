@@ -18,3 +18,48 @@ aa_conc <- read_csv("~/chem313/313_icpms/data/sample_aa.csv")
 icpms_conc <- read_csv("~/chem313/313_icpms/data/sample_icpms.csv")
 ```
 
+```{r}
+icpms_conc_ppm <- icpms_conc %>%
+  mutate(conc_mean = conc_mean/1000,
+         conc_sd = conc_sd/1000,
+         lower_ci = lower/1000,
+         upper_ci = upper/1000) %>%
+  select(-mass_frac,
+         -lower,
+         -upper)
+```
+
+```{r}
+chromium <- rbind(icpms_conc_ppm, aa_conc) %>%
+  mutate(n = case_when(
+    site == "A" ~ 4,
+    site == "B" ~ 5,
+    site == "C" ~ 5,
+    site == "D" ~ 3,
+    site == "E" ~ 2,
+    site == "F" ~ 3
+  ))
+```
+
+```{r}
+#inputs: means, sd, and n for both samples
+#outputs: t value
+ttest <- function(mean1, mean2, sd1, sd2, n1, n2){
+  s_pooled <- sqrt(((sd1^2 * (n1 - 1)) + (sd2^2 *(n2-1)) ) / (n1 + n2 -2))
+  t <- (abs(mean1 - mean2) / s_pooled) * sqrt(((n1 * n2) / (n1 + n2)))
+  return(t)
+}
+```
+
+```{r}
+#t test between methods to make sure the instruments agree
+ttest_a <- ttest(23.7337, 23.1362, 7.605, 7.347, 4, 4)
+ttest_b <- ttest(16.913, 16.206, 5.061, 5.182, 5, 5)
+ttest_c <- ttest(34.009, 26.708, 16.942, 13.305, 5, 5)
+ttest_d <- ttest(12.698, 9.873, 4.466, 4.116, 3, 3)
+ttest_e <- ttest(19.492, 13.387, 8.835, 7.154, 2, 2)
+ttest_f <- ttest(11.555, 6.970, 7.996, 5.152, 3, 3)
+
+```
+
+
