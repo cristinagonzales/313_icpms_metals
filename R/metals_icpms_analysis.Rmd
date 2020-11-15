@@ -206,7 +206,10 @@ sample_conc <- sample_data %>%
   select(-count,
          -error)
 
+sample_conc_icpms <- sample_conc %>%
+  filter(metal == "Cr52")
 
+write.csv(sample_conc_icpms, "~/chem313/313_icpms/data/sample_icpms.csv")
 ```
 
 ```{r average conc from qc}

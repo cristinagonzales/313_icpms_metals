@@ -173,7 +173,7 @@ sample_conc_aa <- sample_data_aa %>%
   select(-count,
          -error)
 
-
+write.csv(sample_conc_aa, "~/chem313/313_icpms/data/sample_aa.csv")
 ```
 
 
