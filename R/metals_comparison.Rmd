@@ -1,0 +1,20 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(readr)
+```
+
+```{r, message = FALSE, warning = FALSE}
+aa_conc <- read_csv("~/chem313/313_icpms/data/sample_aa.csv")
+
+icpms_conc <- read_csv("~/chem313/313_icpms/data/sample_icpms.csv")
+```
+
