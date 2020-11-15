@@ -133,7 +133,7 @@ dil_1010_e <- sqrt(1^2 + 10^2)
 dil_e <- sqrt((dil_1010_e/1010)^2 + (1/10)^2) #error in 101 dilution factor
 
 #correct for dilution and propagate error
-sample_data_aa <- merge(ICPMS, sample_data_mb) %>%
+sample_data_aa <- merge(AA, sample_data_mb) %>%
   unique() %>%
   mutate(conc_blanked = conc_dil_blanked*(total_volume/1000)/(mass_of_soil/1000),
          conc_blanked_error = conc_blanked *   
@@ -151,12 +151,13 @@ sample_data_aa <- merge(ICPMS, sample_data_mb) %>%
          -type,
          -mass_of_soil,
          -total_volume,
-         -cps,
          -rsd,
          -conc_dil_blanked,
          -conc_dil_blanked_error,
          -conc_dil,
-         -conc_dil_error)
+         -conc_dil_error,
+         -mean_abs,
+         -percent_rsd) 
 ```
 
 ```{r average conc from samples}
@@ -176,5 +177,18 @@ sample_conc_aa <- sample_data_aa %>%
 ```
 
 
-
+```{r average conc from qc}
+qc_conc_aa <- sample_data_aa %>%
+  filter(site == "QC") %>%
+  group_by(metal) %>%
+  summarize(conc_mean = mean(conc_unblanked),
+            conc_sd = sd(conc_unblanked),
+            count = n()) %>%
+  mutate(error = qnorm(0.975)*conc_sd/sqrt(count),
+         lower_ci = conc_mean - error,
+         upper_ci = conc_mean + error, 
+         mass_frac = conc_mean/1000) %>%
+  select(-count,
+         -error)
+```
 
