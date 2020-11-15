@@ -31,7 +31,7 @@ slope_std <- summary(model)$coefficients[2,2]
 intercept_std <- summary(model)$coefficients[1,2]
 
 plot(cal$mean_abs ~ cal$concentration,
-       xlab = paste("Concentration of Cr53 (ppb)"),
+       xlab = paste("Concentration of Cr53 (ppm)"),
        ylab = "Mean Absorbance") +
     abline(model, col = "red") +
     title(paste("Calibration for Cr53"))
