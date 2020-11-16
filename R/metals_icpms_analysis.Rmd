@@ -191,6 +191,10 @@ sample_data <- merge(ICPMS, sample_data_mb) %>%
 rm(list = ls()[!ls() %in% c("ICPMS", "sample_data")])
 ```
 
+```{r}
+write.csv(sample_data, "~/chem313/313_icpms/data/sample_data_icpms.csv")
+```
+
 
 ```{r average conc from samples}
 sample_conc <- sample_data %>%
