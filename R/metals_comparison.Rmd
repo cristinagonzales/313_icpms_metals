@@ -62,4 +62,58 @@ ttest_f <- ttest(11.555, 6.970, 7.996, 5.152, 3, 3)
 
 ```
 
+```{r}
+#t test between site a and others for AA
+aa_ttest_ab <- ttest(23.162, 16.206, 7.347, 5.182, 4, 5)
+aa_ttest_ac <- ttest(23.162, 26.708, 7.347, 13.205, 4, 5)
+aa_ttest_ad <- ttest(23.162, 9.873, 7.347, 4.116, 4, 3) #significantly diff
+aa_ttest_ae <- ttest(23.162, 13.387, 7.347, 7.154, 4, 2)
+aa_ttest_af <- ttest(23.162, 6.970, 7.347, 5.152, 4, 3) #significantly diff
+
+#t test between site b and others
+aa_ttest_bc <- ttest(16.206, 26.708, 5.182, 13.205, 5, 5)
+aa_ttest_bd <- ttest(16.206, 9.873, 5.182, 4.116, 5, 3)
+aa_ttest_be <- ttest(16.206, 13.287, 5.182, 7.154, 5, 2)
+aa_ttest_bf <- ttest(16.206, 6.970, 5.182, 5.152, 5, 3)
+
+#t test between site c and others
+aa_ttest_cd <- ttest(26.708, 9.873, 13.205, 4.116, 5, 3)
+aa_ttest_ce <- ttest(26.708, 13.287, 13.205, 7.154, 5, 2)
+aa_ttest_cf <- ttest(26.708, 6.970, 13.205, 5.152, 5, 3)
+
+#t test between site d and others
+aa_ttest_de <- ttest(9.873, 13.287, 4.116, 7.154, 3, 2)
+aa_ttest_df <- ttest(9.873, 6.970, 4.116, 5.152, 3, 3)
+
+#t test between site e and f 
+aa_ttest_ef <- ttest(13.287, 6.970, 7.154, 5.152, 2, 3)
+
+```
+
+```{r}
+#t test between site a and others for ICPMS
+ttest_ab <- ttest(23.7337, 16.913, 7.605, 5.061, 4, 5)
+ttest_ac <- ttest(23.7337, 34.009, 7.605, 16.942, 4, 5)
+ttest_ad <- ttest(23.7337, 12.698, 7.605, 4.466, 4, 3)
+ttest_ae <- ttest(23.7337, 19.492, 7.605, 8.835, 4, 2)
+ttest_af <- ttest(23.7337, 11.555, 7.605, 7.996, 4, 3)
+
+#t test betweeen site b and others
+ttest_bc <- ttest(16.913, 34.009, 5.061, 16.942, 5, 5)
+ttest_bd <- ttest(16.913, 12.698, 5.061, 4.466, 5, 3)
+ttest_be <- ttest(16.913, 19.492, 5.061, 8.835, 5, 2)
+ttest_bf <- ttest(16.913, 11.555, 5.061, 7.996, 5, 3)
+
+#t test between site c and others
+ttest_cd <- ttest(34.009, 12.698, 16.942, 4.466, 5, 3)
+ttest_ce <- ttest(34.009, 19.492, 16.942, 8.835, 5, 2)
+ttest_cf <- ttest(34.009, 11.555, 16.942, 7.996, 5, 3)
+
+#t test between site d and others
+ttest_de <- ttest(12.698, 19.492, 4.466, 8.835, 3, 2)
+ttest_df <- ttest(12.698, 11.555, 4.466, 7.996, 3, 3)
+
+#t test between site e and f
+ttest_ef <- ttest(19.492, 11.555, 8.835, 7.996, 2, 3)
+```
 
