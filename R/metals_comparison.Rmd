@@ -16,6 +16,8 @@ library(readr)
 aa_conc <- read_csv("~/chem313/313_icpms/data/sample_aa.csv")
 
 icpms_conc <- read_csv("~/chem313/313_icpms/data/sample_icpms.csv")
+
+icpms_all <- read_csv("~/chem313/313_icpms/data/sample_conc_allmetals.csv")
 ```
 
 ```{r}
@@ -115,5 +117,13 @@ ttest_df <- ttest(12.698, 11.555, 4.466, 7.996, 3, 3)
 
 #t test between site e and f
 ttest_ef <- ttest(19.492, 11.555, 8.835, 7.996, 2, 3)
+```
+
+```{r}
+#anova test for rest of icpms metals
+icpms_aov <- aov(conc_mean ~ site, data = icpms_all)
+summary(icpms_aov)
+
+
 ```
 
