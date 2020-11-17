@@ -1,6 +1,8 @@
 ---
-  title: "AA Data Analysis"
-output: html_document
+title: "AA Data Analysis"
+output: 
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}

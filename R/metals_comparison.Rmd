@@ -1,6 +1,8 @@
 ---
-title: "Untitled"
-output: html_document
+title: "Statistical tests for AA and ICP-MS"
+output: 
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}

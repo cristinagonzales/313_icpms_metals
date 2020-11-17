@@ -1,6 +1,8 @@
 ---
-title: "Untitled"
-output: html_document
+title: "Tidying ICP-MS data"
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -65,7 +67,7 @@ all(RSD_data$Sample.Key==ICPMS_tidy$Sample.Key, RSD_data$metal==ICPMS_tidy$metal
 ICPMS_merged <- merge(ICPMS_tidy, sample_key) %>%
   clean_names()
 
-ICPMS_merged 
+#ICPMS_merged 
 ```
 
 

@@ -1,6 +1,8 @@
 ---
-title: "Untitled"
-output: html_document
+title: "Tidying AA data"
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
