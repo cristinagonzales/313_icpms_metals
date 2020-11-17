@@ -223,7 +223,12 @@ qc_conc <- sample_data %>%
   mutate(error = qnorm(0.975)*conc_sd/sqrt(count),
          lower_ci = conc_mean - error,
          upper_ci = conc_mean + error, 
-         mass_frac = conc_mean/1000) %>%
+         mass_frac = conc_mean/1000,
+         per_recovery = case_when(
+           metal == "Cd111" | metal == "Cd114" ~ mass_frac/2.94*100,
+           metal == "Cr52" | metal == "Cr53" ~ mass_frac/121.9*100,
+           metal == "Pb208" ~ mass_frac/150*100
+         )) %>%
   select(-count,
          -error)
 ```
